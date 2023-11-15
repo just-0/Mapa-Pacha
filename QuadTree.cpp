@@ -1,0 +1,132 @@
+#include "QuadTree.h"
+
+QuadTree::QuadTree(float x, float y, float a)
+        : bottomLeft(x, y) {
+    h = a;
+    nPoints = 0;
+}
+
+QuadTree::~QuadTree() {
+    for (int i = 0; i < 4; i++) {
+        delete children[i];
+    }
+}
+
+void QuadTree::insert(const Point p) {
+    if (nPoints < maxPoints && children[0] == nullptr)
+    {
+        points[nPoints++] = new Point(p.x, p.y, p.Atributos);
+    } else {
+        if (children[0] == nullptr) {
+            children[0] = new QuadTree(bottomLeft.x, bottomLeft.y, h / 2);
+            children[1] = new QuadTree(bottomLeft.x + h / 2, bottomLeft.y, h / 2);
+            children[2] = new QuadTree(bottomLeft.x, bottomLeft.y + h / 2, h / 2);
+            children[3] = new QuadTree(bottomLeft.x + h / 2, bottomLeft.y + h / 2, h / 2);
+
+            for (int j = 0; j < maxPoints; j++) {
+                for (int i = 0;  i < 4; i++) {
+                    if (children[i]->bottomLeft.x <= points[j]->x && points[j]->x < children[i]->bottomLeft.x + children[i]->h &&
+                        children[i]->bottomLeft.y <= points[j]->y && points[j]->y < children[i]->bottomLeft.y + children[i]->h) {
+
+                        children[i]->insert(*points[j]);
+                        delete points[j];
+                        points[j] = nullptr;
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < 4; i++) {
+            if (children[i]->bottomLeft.x <= p.x && p.x < children[i]->bottomLeft.x + children[i]->h && children[i]->bottomLeft.y <= p.y && p.y < children[i]->bottomLeft.y + children[i]->h) {
+                children[i]->insert(p);
+                nPoints++;
+                break;
+            }
+        }
+    }
+}
+
+void QuadTree::dfs() {
+    if (nPoints <= maxPoints && nPoints != 0) {
+        cout << "-----" << endl;
+        for (int k = 0; k < maxPoints; k++) {
+            if (points[k] != nullptr) cout << "(" << points[k]->x << ", " << points[k]->y << ")"<< endl;
+        }
+
+        cout << "-----" << endl;
+    }
+    for (int i = 0; i < 4; i++)
+        if (children[i] != nullptr)
+            children[i]->dfs();
+}
+
+void QuadTree::bfs() {
+    if (nPoints == 0) {
+        return; // No hay puntos en el árbol
+    }
+
+    queue<QuadTree*> q;
+    q.push(this);
+
+    while (!q.empty()) {
+        QuadTree* current = q.front();
+        q.pop();
+
+        // Aqui realizar algo con el nodo acual que es "current"
+        cout << "-----" << endl;
+        for (int k = 0; k < maxPoints; k++) {
+            if (current->points[k] != nullptr) {
+                cout << "(" << current->points[k]->x << ", " << current->points[k]->y << ")"<<endl;
+            }
+        }
+        cout << "-----" << endl;
+
+        // Encola los hijos no nulos, es parte de el bfs
+        for (int i = 0; i < 4; i++) {
+            if (current->children[i] != nullptr) {
+                q.push(current->children[i]);
+            }
+        }
+    }
+}
+
+
+
+vector<float> QuadTree::representative() {
+    if (nPoints != 0 && nPoints <= maxPoints) //Nodo hoja
+    {
+        vector<float> temp(DIM,0);
+        for (int k = 0; k < maxPoints; k++)
+        {
+            if(points[k] != nullptr)
+            {
+                for(int i = 0; i < DIM ; i++)
+                {
+                    temp[i] = temp[i] + this->points[k]->Atributos[i];
+                }
+            }
+        }
+        for (int j = 0; j < DIM; j++) {
+            this->bottomLeft.Atributos[j] = this->bottomLeft.Atributos[j] + temp[j] / nPoints;
+        }
+        return temp;
+    }
+    vector<float> temp1(DIM, 0);
+    for (int i = 0; i < 4; i++) // Para cada hijo
+    {
+        if (children[i] != nullptr && children[i]->nPoints > 0) {
+            vector<float> temp2 = (children[i]->representative());
+            if (!temp2.empty()) {
+                for (int j = 0; j < DIM; j++) {
+                    temp1[j] = temp1[j] + temp2[j];
+                }
+            }
+        }
+
+    }
+    for (int j = 0; j < DIM; j++) {
+        this->bottomLeft.Atributos[j] = this->bottomLeft.Atributos[j] + temp1[j] / nPoints;
+    }
+    return temp1;
+}
