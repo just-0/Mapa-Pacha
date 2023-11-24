@@ -1,6 +1,6 @@
 #include "QuadTree.h"
 
-QuadTree::QuadTree(float x, float y, float a)
+QuadTree::QuadTree(double x, double y, double a)
         : bottomLeft(x, y) {
     h = a;
     nPoints = 0;
@@ -51,7 +51,9 @@ void QuadTree::dfs() {
     if (nPoints <= maxPoints && nPoints != 0) {
         cout << "-----" << endl;
         for (int k = 0; k < maxPoints; k++) {
-            if (points[k] != nullptr) cout << "(" << points[k]->x << ", " << points[k]->y << ")"<< endl;
+            if (points[k] != nullptr) {
+                cout << "(" << points[k]->x << ", " << points[k]->y << ")"<< endl;
+            }
         }
 
         cout << "-----" << endl;
@@ -60,6 +62,26 @@ void QuadTree::dfs() {
         if (children[i] != nullptr)
             children[i]->dfs();
 }
+
+vector<QuadTree*> QuadTree::bfs2(QuadTree* root){
+    vector<QuadTree*> ans;
+    queue<QuadTree*> q;
+    q.push(root);
+    while(!q.empty()){
+        QuadTree* nodo= q.front();
+        if(nodo->points[0]!= nullptr || nodo->points[1]!= nullptr){
+            ans.push_back(nodo);
+        }
+        for(int i= 0; i< 4; i++){
+            if(nodo->children[i]!= nullptr){
+                q.push(nodo->children[i]);
+            }
+        }
+        q.pop();
+    }
+    return ans;
+}
+
 
 void QuadTree::bfs() {
     if (nPoints == 0) {
@@ -93,10 +115,10 @@ void QuadTree::bfs() {
 
 
 
-vector<float> QuadTree::representative() {
+vector<double> QuadTree::representative() {
     if (nPoints != 0 && nPoints <= maxPoints) //Nodo hoja
     {
-        vector<float> temp(DIM,0);
+        vector<double> temp(DIM,0);
         for (int k = 0; k < maxPoints; k++)
         {
             if(points[k] != nullptr)
@@ -112,11 +134,11 @@ vector<float> QuadTree::representative() {
         }
         return temp;
     }
-    vector<float> temp1(DIM, 0);
+    vector<double> temp1(DIM, 0);
     for (int i = 0; i < 4; i++) // Para cada hijo
     {
         if (children[i] != nullptr && children[i]->nPoints > 0) {
-            vector<float> temp2 = (children[i]->representative());
+            vector<double> temp2 = (children[i]->representative());
             if (!temp2.empty()) {
                 for (int j = 0; j < DIM; j++) {
                     temp1[j] = temp1[j] + temp2[j];
@@ -128,5 +150,7 @@ vector<float> QuadTree::representative() {
     for (int j = 0; j < DIM; j++) {
         this->bottomLeft.Atributos[j] = this->bottomLeft.Atributos[j] + temp1[j] / nPoints;
     }
+    this->rep= temp1;
     return temp1;
 }
+

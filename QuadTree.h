@@ -9,35 +9,33 @@ const int DIM = 30; //Cantidad de Dimensiones por cada dato
 
 using namespace std;
 struct Point {
-    float x;
-    float y;
-    vector<float> Atributos;
-    Point(float a, float b, vector<float> c = vector<float>(DIM,0)) : x(a), y(b), Atributos(c) {}
+    double x;
+    double y;
+    vector<double> Atributos; // Este vector de atributos es su representative
+    Point(double a, double b, vector<double> c = vector<double>(DIM,0)) : x(a), y(b), Atributos(c) {}
 };
 
 class QuadTree {
+    public:
+        static const int maxPoints = 2;
+        QuadTree* children[4] = {nullptr};
+        const Point* points[maxPoints] = {nullptr};
+        vector<QuadTree*> bfs2(QuadTree* root);
 
-private:
-    static const int maxPoints = 2;
-    QuadTree* children[4] = {nullptr};
-    const Point* points[maxPoints] = {nullptr};
+        // bottomLeft y h definen el área(cuadrado más grande)
 
-
-
-    // bottomLeft y h definen el área(cuadrado más grande)
-
-    Point bottomLeft;
-    float h;
-
-public:
-    int nPoints; // puntos ingresados.
-    QuadTree(float, float, float);
-    ~QuadTree();
-    void dfs();
-    void bfs();
-    void insert(const Point);
-    
-    vector<float> representative();// Hallar el vector representativo para cada cuadrante
+        Point bottomLeft;
+        double h;
+        int nPoints; // puntos ingresados.
+        vector<double> rep;
+        QuadTree(double, double, double);
+        ~QuadTree();
+        void dfs();
+        void bfs();
+        void insert(const Point);
+        
+        vector<double> representative();// Hallar el vector representativo para cada cuadrante
 };
 
 #endif // QUADTREE_H
+
