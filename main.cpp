@@ -31,10 +31,10 @@ void ReadCSV(const string& filename, QuadTree &o) {
         if(contador == 5000)break;//AQUI INDICAR CUANTOS DATOS INGRESAR
         if(!campos[0].empty() && !campos[1].empty())//ESTO ES PARA IGNORAR LAS ENTRADAS QUE NO TIENEN NADA
         {
-            float x = stof(campos[0]);
-            float y = stof(campos[1]);
+            double x = stod(campos[0]);
+            double y = stod(campos[1]);
 
-            vector<float> Attr;
+            vector<double> Attr;
             int tmn = campos.size();
             for (int i = 2; i < tmn; i++) {
                 Attr.push_back(stoi(campos[i]));
