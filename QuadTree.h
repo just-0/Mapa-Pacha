@@ -35,6 +35,7 @@ class QuadTree {
         void insert(const Point);
         
         vector<double> representative();// Hallar el vector representativo para cada cuadrante
+        QuadTree* find(QuadTree &Q);
 };
 
 #endif // QUADTREE_H

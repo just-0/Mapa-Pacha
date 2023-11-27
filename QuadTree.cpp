@@ -154,3 +154,21 @@ vector<double> QuadTree::representative() {
     return temp1;
 }
 
+
+QuadTree* QuadTree::find(QuadTree &Q)
+{
+    double x = Q.bottomLeft.x, y = Q.bottomLeft.y, h = Q.h;
+
+    if(this->bottomLeft.x == x && this->bottomLeft.y == y && this->h == h)
+    {
+        return this;
+    }
+    for (int i = 0;  i < 4; i++) {
+        if (children[i] != nullptr &&children[i]->bottomLeft.x <= x && x < children[i]->bottomLeft.x + children[i]->h &&
+            children[i]->bottomLeft.y <= y && y < children[i]->bottomLeft.y + children[i]->h) {
+            return children[i]->find(Q);
+        }
+    }
+
+    return nullptr;
+}

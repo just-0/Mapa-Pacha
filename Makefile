@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall -g
-TARGET = main
+TARGET = main.exe
 OBJS = main.o QuadTree.o
 
 $(TARGET): $(OBJS)
