@@ -36,6 +36,8 @@ class QuadTree {
         
         vector<double> representative();// Hallar el vector representativo para cada cuadrante
         QuadTree* find(QuadTree &Q);
+
+        QuadTree* Test(int); // Función para obtener un cuadrante ya creado aleatorio para testear.
 };
 
 #endif // QUADTREE_H

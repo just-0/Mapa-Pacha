@@ -172,3 +172,22 @@ QuadTree* QuadTree::find(QuadTree &Q)
 
     return nullptr;
 }
+
+QuadTree* QuadTree::Test(int a) {
+    if (nPoints <= maxPoints && nPoints != 0) {
+        cout << "-----" << endl;
+        for (int k = 0; k < maxPoints; k++) {
+            if (points[k] != nullptr) {
+                cout << "(" << points[k]->x << ", " << points[k]->y << ")"<< endl;
+            }
+        }
+        cout << "-----" << endl;
+    }
+    if(a == 0)
+    {
+        return this;
+    }
+    for (int i = 0; i < 4; i++)
+        if (children[i] != nullptr)
+            children[i]->Test(a-1);
+}

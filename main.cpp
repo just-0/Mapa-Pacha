@@ -61,7 +61,9 @@ int main() {
     //q1.bfs();
     QuadTree buscame(0,-500,250);
     QuadTree *qs = q1.find(buscame);
-    cout<<qs->bottomLeft.x<<", "<<qs->bottomLeft.y<<endl; //qs puede dar nullptr
+    QuadTree* ptr = q1.Test(3);
+    //cout<<qs->bottomLeft.x<<", "<<qs->bottomLeft.y<<endl; //qs puede dar nullptr
+    cout<<ptr->bottomLeft.x<<", "<<ptr->bottomLeft.y<<endl; //qs puede dar nullptr
     cout<<"Datos insertados en el arbol -> "<<q1.nPoints<<endl;
     return 0;
 }
