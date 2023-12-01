@@ -27,7 +27,7 @@ class QuadTree {
         Point bottomLeft;
         double h;
         int nPoints; // puntos ingresados.
-        vector<double> rep;
+        // vector<double> rep;
         QuadTree(double, double, double, int level = 0);
         ~QuadTree();
         void dfs();
