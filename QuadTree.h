@@ -4,9 +4,9 @@
 #include<iostream>
 #include<random>
 #include <queue>
+#include<map>
 
 const int DIM = 30; //Cantidad de Dimensiones por cada dato
-
 using namespace std;
 struct Point {
     double x;

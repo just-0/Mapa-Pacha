@@ -3,6 +3,7 @@
 #include <sstream>
 #include <cstdlib>
 #include "QuadTree.h"
+#include "BTree.h"
 void ReadCSV(const string& filename, QuadTree &o) {
     ifstream archivo(filename);
 
@@ -57,14 +58,20 @@ int main() {
 
     ReadCSV("meteorite_clean_test.csv", q1);
     q1.representative();
-    //q1.dfs();	
+    // q1.dfs();	
     //q1.bfs();
-    QuadTree buscame(0,-500,250);
-    QuadTree *qs = q1.find(buscame);
-    QuadTree* ptr = q1.Test(3);
+    // QuadTree buscame(0,-500,250);
+    // QuadTree *qs = q1.find(buscame);
+    // QuadTree* ptr = q1.Test(3);
     //cout<<qs->bottomLeft.x<<", "<<qs->bottomLeft.y<<endl; //qs puede dar nullptr
-    cout<<ptr->bottomLeft.x<<", "<<ptr->bottomLeft.y<<endl; //qs puede dar nullptr
+    // cout<<ptr->bottomLeft.x<<", "<<ptr->bottomLeft.y<<endl; //qs puede dar nullptr
     cout<<"Datos insertados en el arbol -> "<<q1.nPoints<<endl;
+
+    BTree* btree= new BTree();
+    target= new QuadTree(-50,-50,20); //QuadTree que eligió Erick, 1era punto del dataset
+    target->bottomLeft.Atributos= {6,96,54,70,61,71,39,23,85,77,95,15,76,57,85,5,33,48,17,94,39,42,9,13,15,59,5,93,19,63};
+    btree->build(&q1);
+    btree->traversal(btree->root);
     return 0;
 }
 

@@ -1,39 +1,31 @@
+#include "BTree.h"
 #include <iostream>
-#include "QuadTree.cpp"
-#include <unistd.h>
-#include <fstream>
-#include <sstream>
+#include <cmath>
 
-using namespace std;
+QuadTree* target;
+BTree::BTree() {
+    root = nullptr;
+}
 
-#define MAX 6
-#define MIN 3
+BTree::~BTree() {
+    // Implement any necessary cleanup here
+}
 
-struct btreeNode {
-    QuadTree* val[MAX + 1];
-    int count;
-    btreeNode* link[MAX + 1];
-};
-
-btreeNode* root;
-QuadTree* target; //El quadtree que eligio erick
-
-// Función de similitud
-bool operator<(const QuadTree qt1, const QuadTree* qt2) {
+// ERROR SOLUCIONADO: Se debian comparar objetos, no punteros
+bool operator<(const QuadTree& qt1, const QuadTree& qt2) {
     double dist1 = 0.0, dist2 = 0.0;
-    for (int i = 0; i < qt1.rep.size(); i++) {
-        dist1 += pow((qt1.rep[i] - target->rep[i]), 2);
-        dist2 += pow((qt2->rep[i] - target->rep[i]), 2);
+    for (int i = 0; i < qt1.bottomLeft.Atributos.size(); i++) {
+        dist1 += std::pow((qt1.bottomLeft.Atributos[i] - target->bottomLeft.Atributos[i]), 2);
+        dist2 += std::pow((qt2.bottomLeft.Atributos[i] - target->bottomLeft.Atributos[i]), 2);
     }
-    return sqrt(dist1) < sqrt(dist2);
+    return std::sqrt(dist1) < std::sqrt(dist2);
 }
 
-bool operator==(const QuadTree qt1, const QuadTree* qt2) {
-    return (qt1.h== qt2->h && qt1.bottomLeft.x== qt2->bottomLeft.x && qt1.bottomLeft.y== qt2->bottomLeft.y);
+bool operator==(const QuadTree& qt1, const QuadTree& qt2) {
+    return (qt1.h == qt2.h && qt1.bottomLeft.x == qt2.bottomLeft.x && qt1.bottomLeft.y == qt2.bottomLeft.y);
 }
 
-/* Crear nuevo nodo */
-btreeNode* createNode(QuadTree* val, btreeNode* child) {
+btreeNode* BTree::createNode(QuadTree* val, btreeNode* child) {
     btreeNode* newNode = new btreeNode;
     newNode->val[1] = val;
     newNode->count = 1;
@@ -42,8 +34,7 @@ btreeNode* createNode(QuadTree* val, btreeNode* child) {
     return newNode;
 }
 
-/* Agregar valor al nodo en la posición apropiada */
-void addValToNode(QuadTree* val, int pos, btreeNode* node, btreeNode* child) {
+void BTree::addValToNode(QuadTree* val, int pos, btreeNode* node, btreeNode* child) {
     int j = node->count;
     while (j > pos) {
         node->val[j + 1] = node->val[j];
@@ -55,8 +46,7 @@ void addValToNode(QuadTree* val, int pos, btreeNode* node, btreeNode* child) {
     node->count++;
 }
 
-/* Dividir el nodo */
-void splitNode(QuadTree* val, QuadTree** pval, int pos, btreeNode* node, btreeNode* child, btreeNode** newNode) {
+void BTree::splitNode(QuadTree* val, QuadTree** pval, int pos, btreeNode* node, btreeNode* child, btreeNode** newNode) {
     int median, j;
 
     if (pos > MIN)
@@ -84,22 +74,19 @@ void splitNode(QuadTree* val, QuadTree** pval, int pos, btreeNode* node, btreeNo
     node->count--;
 }
 
-/* Establecer el valor en el nodo */
-int setValueInNode(QuadTree* val, QuadTree** pval, btreeNode* node, btreeNode** child) {
-
+int BTree::setValueInNode(QuadTree* val, QuadTree** pval, btreeNode* node, btreeNode** child) {
     int pos;
     if (!node) {
         *pval = val;
         *child = nullptr;
         return 1;
     }
-
-    if (*val < node->val[1]) {
+    if (*val < *(node->val[1])) {
         pos = 0;
     } else {
-        for (pos = node->count; (*val < node->val[pos] && pos > 1); pos--);
-        if (*val == node->val[pos]) {
-            cout << "Duplicados no permitidos\n";
+        for (pos = node->count; (*val < *(node->val[pos]) && pos > 1); pos--);
+        if (*val == *(node->val[pos])) {
+            std::cout << "Duplicados no permitidos\n";
             return 0;
         }
     }
@@ -114,8 +101,7 @@ int setValueInNode(QuadTree* val, QuadTree** pval, btreeNode* node, btreeNode** 
     return 0;
 }
 
-/* Insertar val en el árbol B */
-void insertion(QuadTree* val) {
+void BTree::insertion(QuadTree* val) {
     int flag;
     QuadTree* pval;
     btreeNode* child;
@@ -125,18 +111,17 @@ void insertion(QuadTree* val) {
         root = createNode(pval, child);
 }
 
-/* Buscar val en el árbol B */
-void searching(QuadTree* val, int* pos, btreeNode* myNode) {
+void BTree::searching(QuadTree* val, int* pos, btreeNode* myNode) {
     if (!myNode) {
         return;
     }
 
-    if (*val < myNode->val[1]) {
+    if (*val < *(myNode->val[1])) {
         *pos = 0;
     } else {
-        for (*pos = myNode->count; (*val < myNode->val[*pos] && *pos > 1); (*pos)--);
-        if (*val == myNode->val[*pos]) {
-            cout << "El dato dado se encuentra\n";
+        for (*pos = myNode->count; (*val < *(myNode->val[*pos]) && *pos > 1); (*pos)--);
+        if (*val == *(myNode->val[*pos])) {
+            std::cout << "El dato dado se encuentra\n";
             return;
         }
     }
@@ -144,93 +129,30 @@ void searching(QuadTree* val, int* pos, btreeNode* myNode) {
     return;
 }
 
-/* Tranversal del árbol B */
-void traversal(btreeNode* myNode) {
+void BTree::traversal(btreeNode* node) {
     int i;
-    if (myNode) {
-        for (i = 0; i < myNode->count; i++) {
-            traversal(myNode->link[i]);
-            cout << myNode->val[i + 1]->rep[0] << ' ';
-        }
-        traversal(myNode->link[i]);
-    }
-}
-//----------------------------------------------------------------------------------------------------------------------
-string CWD;
-void ReadCSV(const string& filename, QuadTree &o) {
-    ifstream archivo(filename);
-
-    if (!archivo.is_open()) {
-        cerr << "No se pudo abrir el archivo." << endl;
-        return;
-    }
-
-    string linea;
-    vector<string> campos;
-    int contador = 0;
-
-    getline(archivo, linea);
-
-    while (getline(archivo, linea))
-    {
-        istringstream ss(linea);
-        string campo;
-        while (getline(ss, campo, ','))
-        {
-            campos.push_back(campo);
-        }
-
-
-
-        if(contador == 1250)break;//AQUI INDICAR CUANTOS DATOS INGRESAR
-        if(!campos[0].empty() && !campos[1].empty())//ESTO ES PARA IGNORAR LAS ENTRADAS QUE NO TIENEN NADA
-        {
-            double x = stof(campos[0]);
-            double y = stof(campos[1]);
-
-            vector<double> Attr;
-            int tmn = campos.size();
-            for (int i = 2; i < tmn; i++) {
-                Attr.push_back(stoi(campos[i]));
+    if (node) {
+        for (i = 0; i < node->count; i++) {
+            traversal(node->link[i]);
+            QuadTree* qt = node->val[i + 1];
+            std::cout<<"--------------------------------------------------------------------"<<std::endl;
+            for (int j = 0; j< qt->bottomLeft.Atributos.size(); j++) {
+                std::cout << qt->bottomLeft.Atributos[j] << " ";
             }
-            o.insert(Point(x, y, Attr));
+            std::cout << std::endl;
         }
-        //cout << "x: " << x << ", y: " << y <<endl;
-        contador ++;
-
-
-        campos.clear();
-    }
-    cout<<endl<<endl<<endl<<"Se leyeron "<<contador<<" datos "<<endl;
-    archivo.close();
-}
-
-string getCWD(){
-    char cwd[1024]; // Buffer para almacenar la ruta actual
-    if (getcwd(cwd, sizeof(cwd)) != NULL) {
-        return string(cwd);
-    } 
-    else {
-        perror("getcwd");
-        return "";
+        traversal(node->link[i]);
     }
 }
 
-int main() {
-    CWD= getCWD();
-    QuadTree q1(-500, -500, 1000);
-    ReadCSV(CWD+"/meteorite_clean_test.csv", q1);
-    q1.representative();
-    // q1.dfs();
-    vector<QuadTree*> allNodes= q1.bfs2(&q1);	
-    cout<<"tam: "<<allNodes.size()<<endl;
-    for(auto node:allNodes){
-        insertion(node);
+void BTree::build(QuadTree* qt){
+    //Insertar solo nodos hoja
+    if (qt->nPoints <= qt->maxPoints && qt->nPoints != 0) {
+        this->insertion(qt);
     }
-    // q1.bfs();
-    cout<<"Datos insertados en el arbol -> "<<q1.nPoints<<endl;
-    // target = new QuadTree();
-
-    return 0;
+    for (int i = 0; i < 4; i++){
+        if (qt->children[i] != nullptr && qt->children[i]->bottomLeft.Atributos.size()!= 0){
+            build(qt->children[i]);
+        }
+    }
 }
-

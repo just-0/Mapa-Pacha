@@ -69,9 +69,7 @@ vector<QuadTree*> QuadTree::bfs2(QuadTree* root){
     q.push(root);
     while(!q.empty()){
         QuadTree* nodo= q.front();
-        if(nodo->points[0]!= nullptr || nodo->points[1]!= nullptr){
-            ans.push_back(nodo);
-        }
+        ans.push_back(nodo);
         for(int i= 0; i< 4; i++){
             if(nodo->children[i]!= nullptr){
                 q.push(nodo->children[i]);
