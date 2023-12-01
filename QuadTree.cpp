@@ -1,9 +1,10 @@
 #include "QuadTree.h"
 
-QuadTree::QuadTree(double x, double y, double a)
+QuadTree::QuadTree(double x, double y, double a, int level)
         : bottomLeft(x, y) {
     h = a;
     nPoints = 0;
+    this->level =  level;
 }
 
 QuadTree::~QuadTree() {
@@ -18,10 +19,10 @@ void QuadTree::insert(const Point p) {
         points[nPoints++] = new Point(p.x, p.y, p.Atributos);
     } else {
         if (children[0] == nullptr) {
-            children[0] = new QuadTree(bottomLeft.x, bottomLeft.y, h / 2);
-            children[1] = new QuadTree(bottomLeft.x + h / 2, bottomLeft.y, h / 2);
-            children[2] = new QuadTree(bottomLeft.x, bottomLeft.y + h / 2, h / 2);
-            children[3] = new QuadTree(bottomLeft.x + h / 2, bottomLeft.y + h / 2, h / 2);
+            children[0] = new QuadTree(bottomLeft.x, bottomLeft.y, h / 2,level+1);
+            children[1] = new QuadTree(bottomLeft.x + h / 2, bottomLeft.y, h / 2,level+1);
+            children[2] = new QuadTree(bottomLeft.x, bottomLeft.y + h / 2, h / 2,level+1);
+            children[3] = new QuadTree(bottomLeft.x + h / 2, bottomLeft.y + h / 2, h / 2,level+1);
 
             for (int j = 0; j < maxPoints; j++) {
                 for (int i = 0;  i < 4; i++) {

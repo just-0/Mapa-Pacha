@@ -23,12 +23,12 @@ class QuadTree {
         vector<QuadTree*> bfs2(QuadTree* root);
 
         // bottomLeft y h definen el área(cuadrado más grande)
-
+        int level;
         Point bottomLeft;
         double h;
         int nPoints; // puntos ingresados.
         vector<double> rep;
-        QuadTree(double, double, double);
+        QuadTree(double, double, double, int level = 0);
         ~QuadTree();
         void dfs();
         void bfs();
