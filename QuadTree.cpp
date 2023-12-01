@@ -148,7 +148,7 @@ vector<double> QuadTree::representative() {
     for (int j = 0; j < DIM; j++) {
         this->bottomLeft.Atributos[j] = this->bottomLeft.Atributos[j] + temp1[j] / nPoints;
     }
-    this->rep= temp1;
+    // this->rep= temp1;
     return temp1;
 }
 
