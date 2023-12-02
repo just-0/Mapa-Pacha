@@ -22,14 +22,14 @@ void ReadCSV(const string& filename, QuadTree &o) {
     {
         istringstream ss(linea);
         string campo;
-        while (getline(ss, campo, ','))
+        while (getline(ss, campo, ';'))
         {
             campos.push_back(campo);
         }
 
 
 
-        // if(contador == 5000)break;//AQUI INDICAR CUANTOS DATOS INGRESAR
+        // if(contador == 400)break;//AQUI INDICAR CUANTOS DATOS INGRESAR
         if(!campos[0].empty() && !campos[1].empty())//ESTO ES PARA IGNORAR LAS ENTRADAS QUE NO TIENEN NADA
         {
             double x = stod(campos[0]);
@@ -69,7 +69,7 @@ int main() {
 
     BTree* btree= new BTree();
     target= new QuadTree(-50,-50,20); //QuadTree que eligió Erick, 1era punto del dataset
-    target->bottomLeft.Atributos= {6,96,54,70,61,71,39,23,85,77,95,15,76,57,85,5,33,48,17,94,39,42,9,13,15,59,5,93,19,63};
+    target->bottomLeft.Atributos= {54,38,74,71,94,25,4,2,7,71,4,58,37,5,51,68,95,18,9,95,52,51,30,2,29,91,42,36,77,73};
     btree->build(&q1);
     btree->traversal(btree->root);
     return 0;

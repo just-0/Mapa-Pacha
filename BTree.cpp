@@ -129,12 +129,21 @@ void BTree::searching(QuadTree* val, int* pos, btreeNode* myNode) {
     return;
 }
 
+double distanciaEcludiana(QuadTree* qt1, QuadTree* qt2){
+    double dist= 0;
+    for (int i = 0; i < qt1->bottomLeft.Atributos.size(); i++) {
+        dist += std::pow((qt1->bottomLeft.Atributos[i] - qt2->bottomLeft.Atributos[i]), 2);
+    }
+    return std::sqrt(dist);
+}
+double mnDist= 1e9;
 void BTree::traversal(btreeNode* node) {
     int i;
     if (node) {
         for (i = 0; i < node->count; i++) {
             traversal(node->link[i]);
             QuadTree* qt = node->val[i + 1];
+            mnDist= min(mnDist,distanciaEcludiana(qt,target));
             std::cout<<"--------------------------------------------------------------------"<<std::endl;
             for (int j = 0; j< qt->bottomLeft.Atributos.size(); j++) {
                 std::cout << qt->bottomLeft.Atributos[j] << " ";
@@ -143,11 +152,14 @@ void BTree::traversal(btreeNode* node) {
         }
         traversal(node->link[i]);
     }
+    cout<<"mnDist: "<<mnDist<<endl;
 }
 
+int mxlevel= 0;
 void BTree::build(QuadTree* qt){
     //Insertar solo nodos hoja
     if (qt->nPoints <= qt->maxPoints && qt->nPoints != 0) {
+        mxlevel= max(mxlevel,qt->level);
         this->insertion(qt);
     }
     for (int i = 0; i < 4; i++){
@@ -155,4 +167,5 @@ void BTree::build(QuadTree* qt){
             build(qt->children[i]);
         }
     }
+    cout<<"mxlevel: "<<mxlevel<<endl;
 }
