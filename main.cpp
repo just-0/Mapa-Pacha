@@ -71,7 +71,7 @@ int main() {
     target= new QuadTree(-50,-50,20); //QuadTree que eligió Erick, 1era punto del dataset
     target->bottomLeft.Atributos= {54,38,74,71,94,25,4,2,7,71,4,58,37,5,51,68,95,18,9,95,52,51,30,2,29,91,42,36,77,73};
     btree->build(&q1);
-    btree->traversal(btree->root);
+    // btree->traversal(btree->root);
+    // btree->test();
     return 0;
 }
-

@@ -25,4 +25,5 @@ public:
     void insertion(QuadTree* val);
     void searching(QuadTree* val, int* pos, btreeNode* myNode);
     void traversal(btreeNode* node);
+    void test();
 };

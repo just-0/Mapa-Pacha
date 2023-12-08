@@ -18,7 +18,7 @@ bool operator<(const QuadTree& qt1, const QuadTree& qt2) {
         dist1 += std::pow((qt1.bottomLeft.Atributos[i] - target->bottomLeft.Atributos[i]), 2);
         dist2 += std::pow((qt2.bottomLeft.Atributos[i] - target->bottomLeft.Atributos[i]), 2);
     }
-    return std::sqrt(dist1) < std::sqrt(dist2);
+    return std::sqrt(dist1) > std::sqrt(dist2);
 }
 
 bool operator==(const QuadTree& qt1, const QuadTree& qt2) {
@@ -136,14 +136,19 @@ double distanciaEcludiana(QuadTree* qt1, QuadTree* qt2){
     }
     return std::sqrt(dist);
 }
+
 double mnDist= 1e9;
+QuadTree* qtmn= nullptr;
 void BTree::traversal(btreeNode* node) {
     int i;
     if (node) {
         for (i = 0; i < node->count; i++) {
             traversal(node->link[i]);
             QuadTree* qt = node->val[i + 1];
-            mnDist= min(mnDist,distanciaEcludiana(qt,target));
+            if(distanciaEcludiana(qt,target)< mnDist){
+                mnDist= min(mnDist,distanciaEcludiana(qt,target));
+                qtmn= qt;
+            }
             std::cout<<"--------------------------------------------------------------------"<<std::endl;
             for (int j = 0; j< qt->bottomLeft.Atributos.size(); j++) {
                 std::cout << qt->bottomLeft.Atributos[j] << " ";
@@ -152,7 +157,6 @@ void BTree::traversal(btreeNode* node) {
         }
         traversal(node->link[i]);
     }
-    cout<<"mnDist: "<<mnDist<<endl;
 }
 
 int mxlevel= 0;
@@ -167,5 +171,16 @@ void BTree::build(QuadTree* qt){
             build(qt->children[i]);
         }
     }
-    cout<<"mxlevel: "<<mxlevel<<endl;
+}
+
+void BTree::test(){
+    cout<<"mnDist: "<<mnDist<<endl;
+    if(qtmn){
+        cout<<"QuadTree min: "<<endl;
+        for (int j = 0; j< qtmn->bottomLeft.Atributos.size(); j++) {
+            std::cout << qtmn->bottomLeft.Atributos[j] << " ";
+        }
+        std::cout<<std::endl;
+    }
+    // cout<<"mxlevel: "<<mxlevel<<endl;
 }
