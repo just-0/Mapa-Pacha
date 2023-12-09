@@ -162,7 +162,7 @@ void BTree::traversal(btreeNode* node) {
 int mxlevel= 0;
 void BTree::build(QuadTree* qt){
     //Insertar solo nodos hoja
-    if (qt->nPoints <= qt->maxPoints && qt->nPoints != 0) {
+    if (qt->nPoints <= qt->maxPoints && qt->nPoints != 0 && qt->level == target->level) {
         mxlevel= max(mxlevel,qt->level);
         this->insertion(qt);
     }
@@ -182,5 +182,5 @@ void BTree::test(){
         }
         std::cout<<std::endl;
     }
-    // cout<<"mxlevel: "<<mxlevel<<endl;
+     //cout<<"mxlevel: "<<mxlevel<<endl;
 }

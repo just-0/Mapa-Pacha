@@ -32,12 +32,12 @@ void ReadCSV(const string& filename, QuadTree &o) {
         // if(contador == 400)break;//AQUI INDICAR CUANTOS DATOS INGRESAR
         if(!campos[0].empty() && !campos[1].empty())//ESTO ES PARA IGNORAR LAS ENTRADAS QUE NO TIENEN NADA
         {
-            double x = stod(campos[0]);
-            double y = stod(campos[1]);
+            double x = stod(campos[1]);
+            double y = stod(campos[2]);
 
             vector<double> Attr;
             int tmn = campos.size();
-            for (int i = 2; i < tmn; i++) {
+            for (int i = 3; i < tmn; i++) {
                 Attr.push_back(stoi(campos[i]));
             }
             o.insert(Point(x, y, Attr));
@@ -62,16 +62,27 @@ int main() {
     //q1.bfs();
     // QuadTree buscame(0,-500,250);
     // QuadTree *qs = q1.find(buscame);
-    // QuadTree* ptr = q1.Test(3);
+    QuadTree* ptr = q1.Test(26);
+    target = ptr;
     //cout<<qs->bottomLeft.x<<", "<<qs->bottomLeft.y<<endl; //qs puede dar nullptr
     // cout<<ptr->bottomLeft.x<<", "<<ptr->bottomLeft.y<<endl; //qs puede dar nullptr
     cout<<"Datos insertados en el arbol -> "<<q1.nPoints<<endl;
 
+
+    
     BTree* btree= new BTree();
-    target= new QuadTree(-50,-50,20); //QuadTree que eligió Erick, 1era punto del dataset
-    target->bottomLeft.Atributos= {54,38,74,71,94,25,4,2,7,71,4,58,37,5,51,68,95,18,9,95,52,51,30,2,29,91,42,36,77,73};
     btree->build(&q1);
-    // btree->traversal(btree->root);
-    // btree->test();
+    btree->traversal(btree->root);
+    btree->test();
+
+
+    cout<<"TARGET: \n";
+    for (int j = 0; j< target->bottomLeft.Atributos.size(); j++) {
+            std::cout << target->bottomLeft.Atributos[j] << " ";
+        }
+    cout<<endl;
     return 0;
+
+    //64 63 38 52 23 71.5 32.5 31.5 58 40 67 51.5 23.5 73.5 64.5 58 65.5 50 37 56.5 29 50 69.5 53 60.5 54.5 95 66.5 38 69.5
+    //57.6667 55.6667 63 55.6667 16.3333 60.6667 24.3333 26 43.3333 85.3333 68.6667 49 61.6667 30.6667 28.6667 59.6667 73 56.3333 55.3333 32.6667 47.3333 23.6667 70.6667 52 49.6667 66 84.3333 58.6667 54.3333 72.3333
 }
