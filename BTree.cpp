@@ -139,6 +139,7 @@ double distanciaEcludiana(QuadTree* qt1, QuadTree* qt2){
 
 double mnDist= 1e9;
 QuadTree* qtmn= nullptr;
+vector<vector<double>> cuadrantes;
 void BTree::traversal(btreeNode* node) {
     int i;
     if (node) {
@@ -149,11 +150,15 @@ void BTree::traversal(btreeNode* node) {
                 mnDist= min(mnDist,distanciaEcludiana(qt,target));
                 qtmn= qt;
             }
+            vector<double> datos= {qt->bottomLeft.x, qt->bottomLeft.y, qt->h};
+            cuadrantes.push_back(datos);
             std::cout<<"--------------------------------------------------------------------"<<std::endl;
             for (int j = 0; j< qt->bottomLeft.Atributos.size(); j++) {
                 std::cout << qt->bottomLeft.Atributos[j] << " ";
             }
             std::cout << std::endl;
+            std::cout<<"--------------------------------------------------------------------"<<std::endl;
+
         }
         traversal(node->link[i]);
     }
@@ -161,11 +166,18 @@ void BTree::traversal(btreeNode* node) {
 
 int mxlevel= 0;
 void BTree::build(QuadTree* qt){
-    //Insertar solo nodos hoja
-    if (qt->nPoints <= qt->maxPoints && qt->nPoints != 0 && qt->level == target->level) {
+    if(qt->h < target->h) return;
+    //Insertar quadTrees con el mismo nivel
+    if (qt->nPoints != 0 && qt->h == target->h) {
         mxlevel= max(mxlevel,qt->level);
         this->insertion(qt);
     }
+    // Insertar quadTrees con mayor nivel, solo si son hojas
+    if(qt->nPoints<= qt->maxPoints && qt->nPoints!= 0 && qt->h > target->h){
+        mxlevel= max(mxlevel,qt->level);
+        this->insertion(qt);
+    }
+
     for (int i = 0; i < 4; i++){
         if (qt->children[i] != nullptr && qt->children[i]->bottomLeft.Atributos.size()!= 0){
             build(qt->children[i]);
@@ -173,14 +185,20 @@ void BTree::build(QuadTree* qt){
     }
 }
 
+void BTree::getCuadrantes(vector<vector<double>> &v){
+    for(auto row:cuadrantes) v.push_back(row);
+}
+
 void BTree::test(){
     cout<<"mnDist: "<<mnDist<<endl;
     if(qtmn){
+        std::cout<<"--------------------------------------------------------------------"<<std::endl;
         cout<<"QuadTree min: "<<endl;
         for (int j = 0; j< qtmn->bottomLeft.Atributos.size(); j++) {
             std::cout << qtmn->bottomLeft.Atributos[j] << " ";
         }
         std::cout<<std::endl;
+        std::cout<<"--------------------------------------------------------------------"<<std::endl;
     }
-     //cout<<"mxlevel: "<<mxlevel<<endl;
+    //cout<<"mxlevel: "<<mxlevel<<endl;
 }

@@ -5,6 +5,7 @@ QuadTree::QuadTree(double x, double y, double a, int level)
     h = a;
     nPoints = 0;
     this->level =  level;
+    this->accum.resize(DIM);
 }
 
 QuadTree::~QuadTree() {
@@ -129,28 +130,27 @@ vector<double> QuadTree::representative() {
             }
         }
         for (int j = 0; j < DIM; j++) {
-            this->bottomLeft.Atributos[j] = this->bottomLeft.Atributos[j] + temp[j] / nPoints;
+            this->accum[j]= temp[j]; // puntos acumulados en quadTree hoja
+            this->bottomLeft.Atributos[j] = temp[j] / (double) nPoints;
         }
-        return temp;
+        return this->accum; 
     }
-    vector<double> temp1(DIM, 0);
     for (int i = 0; i < 4; i++) // Para cada hijo
     {
         if (children[i] != nullptr && children[i]->nPoints > 0) {
             vector<double> temp2 = (children[i]->representative());
             if (!temp2.empty()) {
                 for (int j = 0; j < DIM; j++) {
-                    temp1[j] = temp1[j] + temp2[j];
+                    this->accum[j] = this->accum[j] + temp2[j]; //puntos acumulados en quadTree nodo
                 }
             }
         }
 
     }
     for (int j = 0; j < DIM; j++) {
-        this->bottomLeft.Atributos[j] = this->bottomLeft.Atributos[j] + temp1[j] / nPoints;
+        this->bottomLeft.Atributos[j] = this->accum[j] / (double) nPoints;
     }
-    // this->rep= temp1;
-    return temp1;
+    return this->accum;
 }
 
 

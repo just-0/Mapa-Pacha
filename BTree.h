@@ -26,4 +26,5 @@ public:
     void searching(QuadTree* val, int* pos, btreeNode* myNode);
     void traversal(btreeNode* node);
     void test();
+    void getCuadrantes(vector<vector<double>> &v);
 };

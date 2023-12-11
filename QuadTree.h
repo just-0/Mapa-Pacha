@@ -34,6 +34,7 @@ class QuadTree {
         void bfs();
         void insert(const Point);
         
+        vector<double> accum; // Suma acumulada de puntos en el quadTree
         vector<double> representative();// Hallar el vector representativo para cada cuadrante
         QuadTree* find(QuadTree &Q);
 
