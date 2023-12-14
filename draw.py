@@ -5,7 +5,7 @@ from matplotlib.patches import Patch
 # Función para asignar colores según la fila
 def asignar_color(fila, total_filas):
     if fila == 0:
-        return (0.545, 0.0, 0.0, 1.0) # Darkblue para la "región seleccionada"
+        return (0.0, 1.0, 0.0, 1.0) # Darkblue para la "región seleccionada"
     else:
         intensidad = fila / (total_filas - 1)  # Normalizar intensidad para las demás regiones
         return (1.0, 0.0, 0.0, intensidad)
@@ -50,7 +50,7 @@ def graficar_cuadrantes_y_puntos(datos_cuadrantes, datos_meteoritos):
     plt.gca().set_aspect('equal', adjustable='box')  # Asegura que los ejes tengan la misma escala
 
     # Agregar leyenda solo para "Región Seleccionada" y leyenda personalizada fuera del plano cartesiano
-    legend_elements = [Patch(color='darkred', label='Región Seleccionada'),
+    legend_elements = [Patch(color='green', label='Región Seleccionada'),
                        Patch(color='lightcoral', label='Regiones menos similares'),
                        Patch(color='red', label='Regiones más similares'),
                        plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='black', markersize=5, label='Coordenadas de los Meteoritos', linestyle='None')]

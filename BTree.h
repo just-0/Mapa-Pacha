@@ -5,6 +5,7 @@
 #define MIN 3
 
 extern QuadTree* target;
+
 struct btreeNode {
     QuadTree* val[MAX + 1];
     int count;

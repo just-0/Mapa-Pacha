@@ -121,27 +121,18 @@ double suitableLevel(QuadTree *target, double lim){
     return l;
 }
 
-int main() {
+int main() 
+{
     pair<double,double> bottomLeft, topRight;
-    /*cout<<"Ingrese las coordenadas bottomLeft: ";
+    cout<<"Ingrese las coordenadas bottomLeft: ";
     cin>>bottomLeft.first>>bottomLeft.second;
     cout<<"Ingrese las coordenadas topRight: ";
-    cin>>topRight.first>>topRight.second;*/
-    bottomLeft.first= -1, bottomLeft.second= -1;
-    topRight.first= 1, topRight.second= 1;
-    // setMapBoundaries("meteorite_clean_test.csv"); // Limites del mapa
-    // cout<<"Limites del mapa: "<<min_x<<","<<min_y<<","<<max_x<<","<<max_y<<endl;
+    cin>>topRight.first>>topRight.second;
+    
     QuadTree q1(-200, -200, 600);
-    //q1.dfs();
+
     ReadCSV("meteorite_clean_test.csv", q1,bottomLeft,topRight);
     target->h= suitableLevel(target,q1.h); // encontrar el nivel adecuado para target
-    // q1.dfs();	
-    //q1.bfs();
-    // QuadTree buscame(0,-500,250);
-    // QuadTree *qs = q1.find(buscame);
-    // QuadTree* ptr = q1.Test(26);
-    //cout<<qs->bottomLeft.x<<", "<<qs->bottomLeft.y<<endl; //qs puede dar nullptr
-    // cout<<ptr->bottomLeft.x<<", "<<ptr->bottomLeft.y<<endl; //qs puede dar nullptr
     cout<<"Datos insertados en el arbol -> "<<q1.nPoints<<endl;
 
     BTree* btree= new BTree(); // target->h después de la creación del  bTree

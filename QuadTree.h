@@ -27,17 +27,17 @@ class QuadTree {
         Point bottomLeft;
         double h;
         int nPoints; // puntos ingresados.
-        // vector<double> rep;
+        vector<double> accum; // Suma acumulada de puntos en el quadTree
+
+
+        
         QuadTree(double, double, double, int level = 0);
         ~QuadTree();
         void dfs();
         void bfs();
         void insert(const Point);
-        
-        vector<double> accum; // Suma acumulada de puntos en el quadTree
         vector<double> representative();// Hallar el vector representativo para cada cuadrante
         QuadTree* find(QuadTree &Q);
-
         QuadTree* Test(int); // Función para obtener un cuadrante ya creado aleatorio para testear.
 };
 
