@@ -4,11 +4,20 @@ from matplotlib.patches import Patch
 
 # Función para asignar colores según la fila
 def asignar_color(fila, total_filas):
+    if fila == total_filas-1:
+        return (0.0,0.0,1.0,1.0) #color azul para el más similar
     if fila == 0:
-        return (0.0, 1.0, 0.0, 1.0) # Darkblue para la "región seleccionada"
+        return (0.0, 1.0, 0.0, 1.0)  # Verde si la fila es cero
+    elif fila < 0.3 * total_filas:
+        # < 30% color rojo claro
+        return (1.0, 0.41, 0.38, fila / (total_filas * 0.3))
+    elif fila < 0.6 * total_filas:
+        # < 60% color rojo normal
+        return (1.0, 0.0, 0.0, (fila - 0.3 * total_filas) / (total_filas * 0.3))
     else:
-        intensidad = fila / (total_filas - 1)  # Normalizar intensidad para las demás regiones
-        return (1.0, 0.0, 0.0, intensidad)
+        # hasta 100% color rojo oscuro
+        return (0.5, 0.0, 0.0, (fila - 0.6 * total_filas) / (total_filas * 0.4))
+
 
 # Función para leer el archivo cuadrantes.txt
 def leer_cuadrantes(archivo):
@@ -51,8 +60,10 @@ def graficar_cuadrantes_y_puntos(datos_cuadrantes, datos_meteoritos):
 
     # Agregar leyenda solo para "Región Seleccionada" y leyenda personalizada fuera del plano cartesiano
     legend_elements = [Patch(color='green', label='Región Seleccionada'),
-                       Patch(color='lightcoral', label='Regiones menos similares'),
-                       Patch(color='red', label='Regiones más similares'),
+                       Patch(color= 'blue', label= 'Región más Similar'),
+                       Patch(color= (1.0, 0.41, 0.38,1.0), label= "0% - 30% regiones más similares"),
+                       Patch(color= (1.0, 0.0, 0.0, 1.0), label= "30% - 60% regiones más similares"),
+                       Patch(color= (0.5, 0.0, 0.0, 1.0), label= "60% - 100% regiones más similares"),
                        plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='black', markersize=5, label='Coordenadas de los Meteoritos', linestyle='None')]
 
     plt.legend(handles=legend_elements, loc='upper right', bbox_to_anchor=(1.25, 1.0))
