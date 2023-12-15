@@ -11,15 +11,15 @@ Proceso para ejecución:
 
 Se debe seleccionar una región, por ejemplo:
 
-_Ingrese las coordenadas bottomLeft: -35 17_
+_Ingrese las coordenadas bottomLeft:_ `-35 17`
 
-_Ingrese las coordenadas topRight: -20 32_
+_Ingrese las coordenadas topRight:_ `-20 32`
 
 ó
 
-_Ingrese las coordenadas bottomLeft: -31.25 25_
+_Ingrese las coordenadas bottomLeft:_ `-31.25 25`
 
-_Ingrese las coordenadas topRight: -12.50 43.75
+_Ingrese las coordenadas topRight:_ `-12.50 43.75`
 
 Mapa-Pacha hará el trabajo y los resultados se pueden ver con:
 `python3 draw.py`
