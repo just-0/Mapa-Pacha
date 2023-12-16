@@ -1,3 +1,8 @@
+# Integrantes
+
+- Justo Alfredo Perez Choque
+- Abimael Eduardo Arturo Ruiz Trellez
+
 # Ejecución
 
 Por parte de C++, simplemente ejecutar el Makefile con `make` para compilar el código con el dataset con el nombre _meteorite_clean_test_, 
